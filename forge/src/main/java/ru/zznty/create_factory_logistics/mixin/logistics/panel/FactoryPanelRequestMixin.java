@@ -3,7 +3,6 @@ package ru.zznty.create_factory_logistics.mixin.logistics.panel;
 import com.google.common.collect.Multimap;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.simibubi.create.AllPackets;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.logistics.factoryBoard.*;
@@ -23,8 +22,6 @@ import org.joml.Math;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import ru.zznty.create_factory_abstractions.api.generic.AbstractionsCapabilities;
 import ru.zznty.create_factory_abstractions.api.generic.capability.PackagerAttachedHandler;
 import ru.zznty.create_factory_abstractions.api.generic.stack.GenericStack;
@@ -282,15 +279,5 @@ public abstract class FactoryPanelRequestMixin extends FilteringBehaviour implem
         }
 
         panelBE.advancements.awardPlayer(AllAdvancements.FACTORY_GAUGE);
-    }
-
-    @ModifyVariable(
-            method = "tickStorageMonitor",
-            at = @At("STORE"),
-            ordinal = 0,
-            remap = false
-    )
-    private boolean setSatisfied(boolean value, @Local(ordinal = 1) int promised) {
-        return value && promised == 0;
     }
 }
