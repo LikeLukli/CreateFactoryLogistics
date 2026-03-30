@@ -10,10 +10,10 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_abstractions.api.generic.capability.PackageBuilder;
@@ -67,16 +67,16 @@ public class JarPackagerAttachedHandler implements PackagerAttachedHandler {
         if (!(box.getItem() instanceof JarPackageItem)) return false;
 
         Optional<FluidStack> source = FluidUtil.getFluidContained(box);
-        Optional<IFluidHandler> destination = FluidUtil.getFluidHandler(level, pos, side).resolve();
+        IFluidHandler destination = FluidUtil.getFluidHandler(level, pos, side);
 
-        if (source.isEmpty() || destination.isEmpty()) return false;
+        if (source.isEmpty() || destination == null) return false;
 
-        if (destination.get().fill(source.get(), IFluidHandler.FluidAction.SIMULATE) != source.get().getAmount())
+        if (destination.fill(source.get(), IFluidHandler.FluidAction.SIMULATE) != source.get().getAmount())
             return false;
 
         if (simulate) return true;
 
-        return destination.get().fill(source.get(), IFluidHandler.FluidAction.EXECUTE) == source.get().getAmount();
+        return destination.fill(source.get(), IFluidHandler.FluidAction.EXECUTE) == source.get().getAmount();
     }
 
     @Override
@@ -101,7 +101,7 @@ public class JarPackagerAttachedHandler implements PackagerAttachedHandler {
                                                           null);
         {
             GenericIdentifiedInventory identifiedInventory = GenericIdentifiedInventory.from(inv);
-            identifiedInventory.setCapability(ForgeCapabilities.FLUID_HANDLER,
+            identifiedInventory.setCapability(Capabilities.FluidHandler.BLOCK,
                                               packagerBE.drainInventory.getInventory());
         }
         return inv;

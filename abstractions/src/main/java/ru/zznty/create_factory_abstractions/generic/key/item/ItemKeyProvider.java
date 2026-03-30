@@ -1,11 +1,12 @@
 package ru.zznty.create_factory_abstractions.generic.key.item;
 
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_abstractions.api.generic.capability.GenericInventorySummaryProvider;
@@ -18,8 +19,8 @@ import java.util.Optional;
 public class ItemKeyProvider implements GenericKeyProvider<ItemKey> {
     private final GenericCapabilityWrapperProvider<IItemHandler> provider = new GenericCapabilityWrapperProvider<>() {
         @Override
-        public Capability<IItemHandler> capability() {
-            return ForgeCapabilities.ITEM_HANDLER;
+        public BlockCapability<IItemHandler, @Nullable Direction> blockCapability() {
+            return Capabilities.ItemHandler.BLOCK;
         }
 
         @Override

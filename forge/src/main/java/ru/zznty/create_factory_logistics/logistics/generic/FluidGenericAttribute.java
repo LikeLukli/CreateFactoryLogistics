@@ -8,11 +8,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidType;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
+import java.util.Optional;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKeySerializer;
@@ -81,10 +81,10 @@ public class FluidGenericAttribute implements GenericAttribute {
             return List.of(fluidKey);
         }
         if ((!(stack.key() instanceof ItemKey itemKey))) return List.of();
-        LazyOptional<IFluidHandlerItem> fluidHandler = FluidUtil.getFluidHandler(itemKey.stack());
-        if (fluidHandler.isPresent()) {
+        IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(itemKey.stack());
+        if (fluidHandler != null) {
             List<FluidKey> attributes = new ArrayList<>();
-            IFluidHandlerItem handlerItem = fluidHandler.orElse(null);
+            IFluidHandlerItem handlerItem = fluidHandler;
             for (int i = 0; i < handlerItem.getTanks(); i++) {
                 FluidStack fluidInItem = handlerItem.getFluidInTank(i);
                 if (fluidInItem.getRawFluid() != Fluids.EMPTY) {

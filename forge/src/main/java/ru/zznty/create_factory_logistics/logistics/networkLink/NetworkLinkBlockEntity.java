@@ -23,10 +23,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.AttachFace;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.zznty.create_factory_abstractions.api.generic.capability.GenericInventory;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericCapabilityWrapperProvider;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKeyRegistration;
 import ru.zznty.create_factory_abstractions.generic.impl.GenericContentExtender;
@@ -71,36 +69,33 @@ public class NetworkLinkBlockEntity extends SmartBlockEntity {
                           GenericContentExtender.REGISTRY.get().getKey(registration).toString());
     }
 
-    @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (registration != null && (side == null || getConnectedDirection(getBlockState())
-                .getOpposite() == side)) {
-            GenericCapabilityWrapperProvider<Object> provider = registration.provider().capabilityWrapperProvider();
+    @Nullable
+    public GenericInventory getGenericInventoryForCapability(@Nullable Direction side) {
+        if (registration == null) return null;
+        if (side != null && getConnectedDirection(getBlockState()).getOpposite() != side) return null;
 
-            if (provider != null) {
-                return provider.capability().orEmpty(cap,
-                                                     LazyOptional.of(() -> provider.wrap((scanInputSlots, summary) -> {
-                                                         if (scroll.get().includesStored()) {
-                                                             summary.add(GenericInventorySummary.of(
-                                                                     LogisticsManager.getSummaryOfNetwork(link.freqId,
-                                                                                                          true)));
-                                                         }
-                                                         if (scroll.get().includesPromised()) {
-                                                             RequestPromiseQueue queue = Create.LOGISTICS.getQueuedPromises(
-                                                                     link.freqId);
-                                                             if (queue != null)
-                                                                 for (RequestPromise promise : queue.flatten(false)) {
-                                                                     BigGenericStack stack = BigGenericStack.of(
-                                                                             promise.promisedStack);
+        GenericCapabilityWrapperProvider<Object> provider = registration.provider().capabilityWrapperProvider();
+        if (provider == null) return null;
 
-                                                                     if (!stack.get().isEmpty())
-                                                                         summary.add(stack.get());
-                                                                 }
-                                                         }
-                                                     })).cast());
-            }
-        }
-        return super.getCapability(cap, side);
+        final GenericKeyRegistration reg = registration;
+        return keyRegistration -> {
+            if (keyRegistration != reg) return null;
+            return provider.unwrap(provider.wrap((scanInputSlots, summary) -> {
+                if (scroll.get().includesStored()) {
+                    summary.add(GenericInventorySummary.of(
+                            LogisticsManager.getSummaryOfNetwork(link.freqId, true)));
+                }
+                if (scroll.get().includesPromised()) {
+                    RequestPromiseQueue queue = Create.LOGISTICS.getQueuedPromises(link.freqId);
+                    if (queue != null)
+                        for (RequestPromise promise : queue.flatten(false)) {
+                            BigGenericStack stack = BigGenericStack.of(promise.promisedStack);
+                            if (!stack.get().isEmpty())
+                                summary.add(stack.get());
+                        }
+                }
+            }));
+        };
     }
 
     private static class ValueBox extends ValueBoxTransform.Sided {

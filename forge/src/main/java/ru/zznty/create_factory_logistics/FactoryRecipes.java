@@ -1,9 +1,9 @@
 package ru.zznty.create_factory_logistics;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.RegistryObject;
 import ru.zznty.create_factory_logistics.logistics.networkLink.NetworkLinkQualificationRecipe;
 
 public class FactoryRecipes {

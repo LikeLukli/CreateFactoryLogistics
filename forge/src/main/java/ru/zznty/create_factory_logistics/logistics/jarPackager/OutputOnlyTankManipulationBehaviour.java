@@ -8,7 +8,7 @@ import net.createmod.catnip.math.BlockFace;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.util.LazyOptional;
+import java.util.Optional;
 
 /**
  * Special cases Create block entities to only pick their outputs instead of default
@@ -30,7 +30,7 @@ public class OutputOnlyTankManipulationBehaviour extends TankManipulationBehavio
         Level world = getWorld();
         BlockFace targetBlockFace = this.getTarget().getOpposite();
         BlockPos pos = targetBlockFace.getPos();
-        targetCapability = LazyOptional.empty();
+        targetCapability = null;
 
         if (!world.isLoaded(pos))
             return;
@@ -40,7 +40,7 @@ public class OutputOnlyTankManipulationBehaviour extends TankManipulationBehavio
         if (invBE instanceof SmartBlockEntity be) {
             SmartFluidTankBehaviour tankBehaviour = be.getBehaviour(SmartFluidTankBehaviour.OUTPUT);
             if (tankBehaviour != null) {
-                targetCapability = tankBehaviour.getCapability().cast();
+                targetCapability = tankBehaviour.getCapability();
                 return;
             }
         }

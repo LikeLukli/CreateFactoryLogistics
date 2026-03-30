@@ -24,9 +24,9 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.level.BlockEvent;
+import net.neoforged.neoforge.common.NeoForgeMod;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.BlockEvent;
 import ru.zznty.create_factory_logistics.FactoryBlockEntities;
 import ru.zznty.create_factory_logistics.FactoryBlocks;
 
@@ -119,7 +119,7 @@ public class FactoryFluidPanelBlock extends FactoryPanelBlock {
                 return InteractionResult.SUCCESS;
 
             BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, world.getBlockState(pos), player);
-            MinecraftForge.EVENT_BUS.post(event);
+            NeoForge.EVENT_BUS.post(event);
             if (event.isCanceled())
                 return InteractionResult.SUCCESS;
 
@@ -149,7 +149,7 @@ public class FactoryFluidPanelBlock extends FactoryPanelBlock {
     }
 
     private boolean tryDestroySubPanelFirst(BlockState state, Level level, BlockPos pos, Player player) {
-        double range = player.getAttribute(ForgeMod.BLOCK_REACH.get())
+        double range = player.getAttribute(NeoForgeMod.BLOCK_REACH.get())
                 .getValue() + 1;
         HitResult hitResult = player.pick(range, 1, false);
         Vec3 location = hitResult.getLocation();

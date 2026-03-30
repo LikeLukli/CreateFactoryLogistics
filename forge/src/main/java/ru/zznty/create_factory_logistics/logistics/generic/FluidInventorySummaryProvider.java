@@ -2,8 +2,8 @@ package ru.zznty.create_factory_logistics.logistics.generic;
 
 import com.simibubi.create.content.fluids.tank.CreativeFluidTankBlockEntity;
 import com.simibubi.create.content.logistics.BigItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import ru.zznty.create_factory_abstractions.api.generic.capability.GenericInventorySummaryProvider;
 import ru.zznty.create_factory_abstractions.generic.support.GenericInventorySummary;
 import ru.zznty.create_factory_logistics.mixin.accessor.HosePulleyFluidHandlerAccessor;

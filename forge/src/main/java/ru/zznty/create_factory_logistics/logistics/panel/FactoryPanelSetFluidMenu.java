@@ -4,7 +4,7 @@ import com.simibubi.create.content.logistics.factoryBoard.FactoryPanelSetItemMen
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import ru.zznty.create_factory_logistics.FactoryMenus;
 import ru.zznty.create_factory_logistics.logistics.FluidItemStackHandler;
 

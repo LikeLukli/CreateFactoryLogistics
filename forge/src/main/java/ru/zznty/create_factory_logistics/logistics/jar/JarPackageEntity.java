@@ -17,11 +17,11 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.network.PlayMessages;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.network.PlayMessages;
 import ru.zznty.create_factory_logistics.FactoryEntities;
 import ru.zznty.create_factory_logistics.logistics.jar.unpack.JarUnpackingHandler;
 import ru.zznty.create_factory_logistics.mixin.accessor.PackageEntityAccessor;
@@ -51,9 +51,10 @@ public class JarPackageEntity extends PackageEntity implements IHaveGoggleInform
     @Override
     public void setBox(ItemStack box) {
         super.setBox(box);
-        box.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(item -> {
-            fluidLevel.chase(item.getFluidInTank(0).getAmount(), .5, LerpedFloat.Chaser.EXP);
-        });
+        var fluidHandler = box.getCapability(Capabilities.FluidHandler.ITEM);
+        if (fluidHandler != null) {
+            fluidLevel.chase(fluidHandler.getFluidInTank(0).getAmount(), .5, LerpedFloat.Chaser.EXP);
+        }
     }
 
     @Override
@@ -77,7 +78,7 @@ public class JarPackageEntity extends PackageEntity implements IHaveGoggleInform
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        return containedFluidTooltip(tooltip, isPlayerSneaking, FluidUtil.getFluidHandler(box).cast());
+        return containedFluidTooltip(tooltip, isPlayerSneaking, box.getCapability(Capabilities.FluidHandler.ITEM));
     }
 
     public static JarPackageEntity fromDroppedItem(Level world, Entity originalEntity, ItemStack itemstack) {

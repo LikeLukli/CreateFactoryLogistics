@@ -1,7 +1,7 @@
 package ru.zznty.create_factory_logistics.logistics.generic;
 
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import ru.zznty.create_factory_abstractions.api.generic.stack.GenericStack;
 
 public final class FluidGenericStack {

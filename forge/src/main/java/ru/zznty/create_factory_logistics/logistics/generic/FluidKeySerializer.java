@@ -5,7 +5,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKeySerializer;
 
 public class FluidKeySerializer implements GenericKeySerializer<FluidKey> {

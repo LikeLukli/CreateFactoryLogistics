@@ -29,9 +29,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -93,10 +91,18 @@ public abstract class GenericPackagerBlockEntityMixin extends SmartBlockEntity i
     }
 
     @Shadow
-    public abstract <T> LazyOptional<T> getCapability(Capability<T> cap, Direction side);
+    public abstract boolean isRemoved();
 
     @Unique
     private GeneticInventoryBehaviour createFactoryLogistics$inventoryBehaviour;
+
+    @Unique
+    @Nullable
+    private PackagerAttachedHandler createFactoryLogistics$getAttachedHandler() {
+        if (level == null) return null;
+        return level.getCapability(AbstractionsCapabilities.PACKAGER_ATTACHED,
+                worldPosition, getBlockState(), (BlockEntity) (Object) this, null);
+    }
 
     public GenericPackagerBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -179,7 +185,7 @@ public abstract class GenericPackagerBlockEntityMixin extends SmartBlockEntity i
 
         Objects.requireNonNull(level);
 
-        Optional<PackagerAttachedHandler> handler = getCapability(AbstractionsCapabilities.PACKAGER_ATTACHED).resolve();
+        Optional<PackagerAttachedHandler> handler = Optional.ofNullable(createFactoryLogistics$getAttachedHandler());
         if (handler.isEmpty()) return promiseQueues;
 
         for (Direction d : Iterate.directions) {
@@ -230,15 +236,14 @@ public abstract class GenericPackagerBlockEntityMixin extends SmartBlockEntity i
 
         ItemStack originalBox = box.copy();
 
-        boolean unpacked = getCapability(AbstractionsCapabilities.PACKAGER_ATTACHED).map(handler ->
-                                                                                                 handler.unwrap(level,
-                                                                                                                target,
-                                                                                                                targetState,
-                                                                                                                facing,
-                                                                                                                orderContext,
-                                                                                                                box,
-                                                                                                                simulate))
-                .orElse(false);
+        PackagerAttachedHandler attachedHandler = createFactoryLogistics$getAttachedHandler();
+        boolean unpacked = attachedHandler != null && attachedHandler.unwrap(level,
+                target,
+                targetState,
+                facing,
+                orderContext,
+                box,
+                simulate);
 
         if (unpacked && !simulate) {
             previouslyUnwrapped = originalBox;
@@ -317,7 +322,7 @@ public abstract class GenericPackagerBlockEntityMixin extends SmartBlockEntity i
         int fixedOrderId = 0;
         String fixedAddress = null;
 
-        Optional<PackagerAttachedHandler> target = getCapability(AbstractionsCapabilities.PACKAGER_ATTACHED).resolve();
+        Optional<PackagerAttachedHandler> target = Optional.ofNullable(createFactoryLogistics$getAttachedHandler());
         if (target.isEmpty())
             return Pair.of(ItemStack.EMPTY, null);
 

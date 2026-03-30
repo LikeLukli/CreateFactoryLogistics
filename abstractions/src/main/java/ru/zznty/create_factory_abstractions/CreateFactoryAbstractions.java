@@ -1,9 +1,9 @@
 package ru.zznty.create_factory_abstractions;
 
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.javafmlmod.FMLJavaModLoadingContext;
 import ru.zznty.create_factory_abstractions.compat.computercraft.AbstractionsComputerCraftCompat;
 import ru.zznty.create_factory_abstractions.generic.impl.GenericContentExtender;
 import ru.zznty.create_factory_abstractions.registry.TypeRegistries;

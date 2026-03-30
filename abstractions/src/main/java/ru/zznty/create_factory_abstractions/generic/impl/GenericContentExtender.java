@@ -2,15 +2,15 @@ package ru.zznty.create_factory_abstractions.generic.impl;
 
 import net.createmod.catnip.data.Pair;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.registries.IForgeRegistry;
-import net.minecraftforge.registries.NewRegistryEvent;
-import net.minecraftforge.registries.RegisterEvent;
-import net.minecraftforge.registries.RegistryBuilder;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.registries.IForgeRegistry;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforge.registries.RegisterEvent;
+import net.neoforged.neoforge.registries.RegistryBuilder;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_abstractions.CreateFactoryAbstractions;
@@ -65,15 +65,13 @@ public final class GenericContentExtender {
     private static void fillKeys(IForgeRegistry<GenericKeyRegistration> registry) {
         Registration<EmptyKey> emptyKeyRegistration = new Registration<>(new EmptyKeyProvider(),
                                                                          new EmptyKeySerializer(),
-                                                                         DistExecutor.safeCallWhenOn(Dist.CLIENT,
-                                                                                                     () -> EmptyKeyClientProvider::new));
+                                                                         FMLEnvironment.dist.isClient() ? new EmptyKeyClientProvider() : null);
         registry.register(ResourceLocation.fromNamespaceAndPath(ID, "empty"),
                           emptyKeyRegistration);
         REGISTRATIONS.put(EmptyKey.class, emptyKeyRegistration);
 
         Registration<ItemKey> itemKeyRegistration = new Registration<>(new ItemKeyProvider(), new ItemKeySerializer(),
-                                                                       DistExecutor.safeCallWhenOn(Dist.CLIENT,
-                                                                                                   () -> ItemKeyClientProvider::new));
+                                                                       FMLEnvironment.dist.isClient() ? new ItemKeyClientProvider() : null);
         registry.register(ResourceLocation.fromNamespaceAndPath(ID, "item"),
                           itemKeyRegistration);
         REGISTRATIONS.put(ItemKey.class, itemKeyRegistration);
@@ -100,22 +98,19 @@ public final class GenericContentExtender {
                     }
                 });
 
-                DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new DistExecutor.SafeRunnable() {
-                    @Override
-                    public void run() {
-                        extension.registerClient(new ClientContentRegistration() {
-                            @Override
-                            public <Key extends GenericKey> void register(String id,
-                                                                          Consumer<ClientRegistrationBuilder<Key>> builder) {
-                                ClientRegistrationBuilderImpl<Key> registrationBuilder = new ClientRegistrationBuilderImpl<>();
-                                builder.accept(registrationBuilder);
-                                registrations.computeIfPresent(id,
-                                                               (s, pair) -> Pair.of(pair.getFirst(),
-                                                                                    registrationBuilder));
-                            }
-                        });
-                    }
-                });
+                if (FMLEnvironment.dist.isClient()) {
+                    extension.registerClient(new ClientContentRegistration() {
+                        @Override
+                        public <Key extends GenericKey> void register(String id,
+                                                                      Consumer<ClientRegistrationBuilder<Key>> builder) {
+                            ClientRegistrationBuilderImpl<Key> registrationBuilder = new ClientRegistrationBuilderImpl<>();
+                            builder.accept(registrationBuilder);
+                            registrations.computeIfPresent(id,
+                                                           (s, pair) -> Pair.of(pair.getFirst(),
+                                                                                registrationBuilder));
+                        }
+                    });
+                }
 
                 for (Map.Entry<String, Pair<CommonRegistrationBuilderImpl<?>, ClientRegistrationBuilderImpl<?>>> pairEntry : registrations.entrySet()) {
                     Pair<CommonRegistrationBuilderImpl<?>, ClientRegistrationBuilderImpl<?>> pair = pairEntry.getValue();

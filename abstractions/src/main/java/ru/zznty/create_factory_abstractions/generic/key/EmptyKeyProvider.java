@@ -2,7 +2,7 @@ package ru.zznty.create_factory_abstractions.generic.key;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKey;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKeyProvider;

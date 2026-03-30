@@ -3,7 +3,7 @@ package ru.zznty.create_factory_abstractions.generic.key.item;
 import com.simibubi.create.content.logistics.BigItemStack;
 import com.simibubi.create.content.logistics.crate.BottomlessItemHandler;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 import ru.zznty.create_factory_abstractions.api.generic.capability.GenericInventorySummaryProvider;
 import ru.zznty.create_factory_abstractions.api.generic.stack.GenericStack;
 import ru.zznty.create_factory_abstractions.generic.support.GenericInventorySummary;

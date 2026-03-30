@@ -5,7 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.registries.ForgeRegistries;
 import ru.zznty.create_factory_logistics.logistics.jar.unpack.JarUnpackingHandler;
 
 import java.util.Optional;

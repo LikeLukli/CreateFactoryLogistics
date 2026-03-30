@@ -3,7 +3,7 @@ package ru.zznty.create_factory_abstractions.generic.support;
 import com.simibubi.create.content.logistics.filter.FilterItemStack;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import ru.zznty.create_factory_abstractions.api.generic.stack.GenericStack;
 
 public abstract class GenericFilterItemStack extends FilterItemStack {

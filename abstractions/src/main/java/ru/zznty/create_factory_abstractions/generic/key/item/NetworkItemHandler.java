@@ -1,8 +1,8 @@
 package ru.zznty.create_factory_abstractions.generic.key.item;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
 import org.jetbrains.annotations.NotNull;
 import ru.zznty.create_factory_abstractions.api.generic.capability.GenericInventorySummaryProvider;
 import ru.zznty.create_factory_abstractions.api.generic.stack.GenericStack;

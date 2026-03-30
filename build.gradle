@@ -2,6 +2,7 @@ plugins {
     id 'dev.architectury.loom' version '1.11-SNAPSHOT' apply false
 }
 
+
 allprojects {
     group = rootProject.mod_group_id
 }
@@ -20,6 +21,7 @@ subprojects {
                 includeGroup "curse.maven"
             }
         }
+        maven { url = "https://maven.neoforged.net/releases/" } // NeoForge
         maven { url = "https://maven.createmod.net" } // Create, Ponder, Flywheel
         maven { url = "https://modmaven.dev/" } // Registrate
         maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // ForgeConfigAPIPort
@@ -49,22 +51,21 @@ subprojects {
     dependencies {
         minecraft "net.minecraft:minecraft:${minecraft_version}"
         mappings loom.officialMojangMappings()
-        forge "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+        neoForge "net.neoforged:neoforge:${neo_version}"
 
-        modCompileOnly "mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"
-        modCompileOnly "mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"
-        modCompileOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
-        modRuntimeOnly "mezz.jei:jei-${minecraft_version}-forge:${jei_version}"
+        modCompileOnly "mezz.jei:jei-${minecraft_version}-neoforge-api:${jei_version}"
+        modCompileOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
+        modRuntimeOnly "mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}"
 
         compileOnly "cc.tweaked:cc-tweaked-${minecraft_version}-core-api:${cc_tweaked_version}"
-        modCompileOnly "cc.tweaked:cc-tweaked-${minecraft_version}-forge-api:${cc_tweaked_version}", {
+        modCompileOnly "cc.tweaked:cc-tweaked-${minecraft_version}-neoforge-api:${cc_tweaked_version}", {
             transitive = false
         }
 
         modImplementation "com.simibubi.create:create-${minecraft_version}:${create_version}:slim", { transitive = false }
-        modImplementation "net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"
-        modCompileOnly "dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"
-        modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"
+        modImplementation "net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}"
+        modCompileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}"
+        modRuntimeOnly "dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
         modImplementation "com.tterrag.registrate:Registrate:${registrate_version}"
     }
 
@@ -74,12 +75,12 @@ subprojects {
         // If you remove this line, sources will not be generated.
         withSourcesJar()
 
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     tasks.withType(JavaCompile).configureEach {
-        it.options.release = 17
+        it.options.release = 21
     }
 
     tasks.named('jar', Jar).configure {

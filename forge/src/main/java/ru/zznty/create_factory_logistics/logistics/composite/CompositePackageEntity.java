@@ -16,16 +16,15 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.network.PlayMessages;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import net.neoforged.neoforge.network.PlayMessages;
 import ru.zznty.create_factory_logistics.FactoryEntities;
 import ru.zznty.create_factory_logistics.mixin.accessor.PackageEntityAccessor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public class CompositePackageEntity extends PackageEntity implements IHaveGoggleInformation {
     public List<ItemStack> children = List.of();
@@ -75,11 +74,11 @@ public class CompositePackageEntity extends PackageEntity implements IHaveGoggle
 
         boolean isEmpty = true;
         for (ItemStack child : children) {
-            Optional<IFluidHandlerItem> fluidHandler = FluidUtil.getFluidHandler(child).resolve();
-            if (fluidHandler.isEmpty())
+            IFluidHandlerItem fluidHandler = FluidUtil.getFluidHandler(child);
+            if (fluidHandler == null)
                 continue;
 
-            FluidStack fluidStack = fluidHandler.get().getFluidInTank(0);
+            FluidStack fluidStack = fluidHandler.getFluidInTank(0);
             if (fluidStack.isEmpty())
                 continue;
 
