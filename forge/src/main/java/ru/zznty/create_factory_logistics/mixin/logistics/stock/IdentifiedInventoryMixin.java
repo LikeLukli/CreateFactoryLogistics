@@ -2,9 +2,10 @@ package ru.zznty.create_factory_logistics.mixin.logistics.stock;
 
 import com.simibubi.create.api.packager.InventoryIdentifier;
 import com.simibubi.create.content.logistics.packager.IdentifiedInventory;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraft.core.Direction;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.items.IItemHandler;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -26,7 +27,7 @@ public class IdentifiedInventoryMixin implements GenericIdentifiedInventory {
 
     @Unique
     @Nullable
-    private Capability<?> createFactoryLogistics$capability;
+    private BlockCapability<?, @Nullable Direction> createFactoryLogistics$capability;
 
     @Unique
     @Nullable
@@ -38,8 +39,8 @@ public class IdentifiedInventoryMixin implements GenericIdentifiedInventory {
     }
 
     @Override
-    public Capability<?> capability() {
-        return handler != null ? ForgeCapabilities.ITEM_HANDLER : createFactoryLogistics$capability;
+    public BlockCapability<?, @Nullable Direction> blockCapability() {
+        return handler != null ? Capabilities.ItemHandler.BLOCK : createFactoryLogistics$capability;
     }
 
     @Override
@@ -48,7 +49,7 @@ public class IdentifiedInventoryMixin implements GenericIdentifiedInventory {
     }
 
     @Override
-    public <T> void setCapability(Capability<T> capability, T handler) {
+    public <T> void setCapability(BlockCapability<T, @Nullable Direction> capability, T handler) {
         if (this.handler != null)
             throw new IllegalArgumentException("Handler must be null");
         createFactoryLogistics$capability = capability;

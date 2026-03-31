@@ -6,8 +6,8 @@ import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointTyp
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 
 public class FactoryArmInteractionPointTypes {

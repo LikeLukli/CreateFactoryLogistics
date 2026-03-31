@@ -3,7 +3,7 @@ package ru.zznty.create_factory_logistics.logistics.generic;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.createmod.catnip.platform.ForgeCatnipServices;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKeyClientRenderHandler;
 
 public class FluidClientRenderHandler implements GenericKeyClientRenderHandler<FluidKey> {

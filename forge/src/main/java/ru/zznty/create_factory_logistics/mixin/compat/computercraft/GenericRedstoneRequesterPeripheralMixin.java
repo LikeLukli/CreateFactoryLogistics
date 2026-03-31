@@ -7,10 +7,10 @@ import com.simibubi.create.content.logistics.redstoneRequester.RedstoneRequester
 import dan200.computercraft.api.lua.IArguments;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.lua.LuaFunction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Unique;
@@ -82,7 +82,7 @@ public abstract class GenericRedstoneRequesterPeripheralMixin extends SyncedPeri
             Object arg = arguments.get(i);
             if (arg instanceof String itemName) {
                 ResourceLocation resourceLocation = ResourceLocation.tryParse(itemName);
-                ItemLike item = ForgeRegistries.ITEMS.getValue(resourceLocation);
+                ItemLike item = BuiltInRegistries.ITEM.get(resourceLocation);
                 list.add(GenericStack.wrap(new ItemStack(item, 1)));
             } else if (arg instanceof Map<?, ?> data) {
                 list.add(GenericStackParser.parseAny(data));

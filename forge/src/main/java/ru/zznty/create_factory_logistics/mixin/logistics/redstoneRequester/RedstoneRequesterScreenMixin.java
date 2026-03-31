@@ -25,9 +25,9 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
@@ -94,7 +94,7 @@ public abstract class RedstoneRequesterScreenMixin extends AbstractSimiContainer
             method = "renderForeground",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraftforge/items/ItemStackHandler;getStackInSlot(I)Lnet/minecraft/world/item/ItemStack;"
+                    target = "Lnet/neoforged/neoforge/items/ItemStackHandler;getStackInSlot(I)Lnet/minecraft/world/item/ItemStack;"
             ),
             remap = false
     )
@@ -138,7 +138,7 @@ public abstract class RedstoneRequesterScreenMixin extends AbstractSimiContainer
             method = "mouseScrolled",
             at = @At(
                     value = "INVOKE",
-                    target = "Lnet/minecraftforge/items/ItemStackHandler;getStackInSlot(I)Lnet/minecraft/world/item/ItemStack;"
+                    target = "Lnet/neoforged/neoforge/items/ItemStackHandler;getStackInSlot(I)Lnet/minecraft/world/item/ItemStack;"
             )
     )
     private ItemStack getIngredientInSlotMouseHandler(ItemStackHandler instance, int slot,

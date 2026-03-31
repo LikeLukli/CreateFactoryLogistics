@@ -4,8 +4,8 @@ import dan200.computercraft.api.detail.ForgeDetailRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.minecraft.core.registries.BuiltInRegistries;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKeyRegistration;
 import ru.zznty.create_factory_abstractions.api.generic.stack.GenericStack;
 import ru.zznty.create_factory_abstractions.compat.computercraft.GenericDetailsProvider;
@@ -39,7 +39,7 @@ public class ComputerCraftCompat {
             if (count < 0)
                 count = 1;
             ResourceLocation resourceLocation = ResourceLocation.tryParse(name);
-            Fluid fluid = ForgeRegistries.FLUIDS.getValue(resourceLocation);
+            Fluid fluid = BuiltInRegistries.FLUID.get(resourceLocation);
             if (fluid == null) return GenericStack.EMPTY;
 
             CompoundTag tag = null;

@@ -16,10 +16,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import ru.zznty.create_factory_logistics.FactoryBlockEntities;
 import ru.zznty.create_factory_logistics.FactoryBlocks;
 import ru.zznty.create_factory_logistics.compat.packagerspsic.PackagersPSIC;
@@ -42,7 +40,6 @@ public class JarPackagerBlock extends PackagerBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Capability<IFluidHandler> fluidCap = ForgeCapabilities.FLUID_HANDLER;
         Direction preferredFacing = null;
         for (Direction face : context.getNearestLookingDirections()) {
             BlockEntity be = context.getLevel()
@@ -50,8 +47,10 @@ public class JarPackagerBlock extends PackagerBlock {
                                             .relative(face));
             if (be instanceof PackagerBlockEntity)
                 continue;
-            if (be != null && (be.getCapability(fluidCap)
-                    .isPresent())) {
+            Level level = context.getLevel();
+            BlockPos relPos = context.getClickedPos().relative(face);
+            if (be != null && level.getCapability(Capabilities.FluidHandler.BLOCK, relPos,
+                    be.getBlockState(), be, face.getOpposite()) != null) {
                 preferredFacing = face.getOpposite();
                 break;
             }

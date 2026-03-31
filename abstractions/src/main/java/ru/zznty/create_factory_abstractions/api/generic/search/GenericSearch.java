@@ -4,7 +4,7 @@ import com.simibubi.create.foundation.utility.CreateLang;
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.RegistryManager;
+import net.neoforged.neoforge.registries.RegistryManager;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.apache.commons.lang3.mutable.MutableInt;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKeyRegistration;

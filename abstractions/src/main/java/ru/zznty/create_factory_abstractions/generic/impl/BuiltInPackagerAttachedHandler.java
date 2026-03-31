@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_abstractions.api.generic.capability.PackageBuilder;
 import ru.zznty.create_factory_abstractions.api.generic.capability.PackagerAttachedHandler;

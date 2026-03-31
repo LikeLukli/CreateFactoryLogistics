@@ -17,17 +17,15 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.network.PlayMessages;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
 import ru.zznty.create_factory_logistics.FactoryEntities;
 import ru.zznty.create_factory_logistics.logistics.jar.unpack.JarUnpackingHandler;
 import ru.zznty.create_factory_logistics.mixin.accessor.PackageEntityAccessor;
 
 import java.util.List;
-import java.util.Optional;
 
 public class JarPackageEntity extends PackageEntity implements IHaveGoggleInformation {
     public LerpedFloat fluidLevel = LerpedFloat.linear();
@@ -51,9 +49,10 @@ public class JarPackageEntity extends PackageEntity implements IHaveGoggleInform
     @Override
     public void setBox(ItemStack box) {
         super.setBox(box);
-        box.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).ifPresent(item -> {
-            fluidLevel.chase(item.getFluidInTank(0).getAmount(), .5, LerpedFloat.Chaser.EXP);
-        });
+        var fluidHandler = box.getCapability(Capabilities.FluidHandler.ITEM);
+        if (fluidHandler != null) {
+            fluidLevel.chase(fluidHandler.getFluidInTank(0).getAmount(), .5, LerpedFloat.Chaser.EXP);
+        }
     }
 
     @Override
@@ -77,7 +76,7 @@ public class JarPackageEntity extends PackageEntity implements IHaveGoggleInform
 
     @Override
     public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        return containedFluidTooltip(tooltip, isPlayerSneaking, FluidUtil.getFluidHandler(box).cast());
+        return containedFluidTooltip(tooltip, isPlayerSneaking, box.getCapability(Capabilities.FluidHandler.ITEM));
     }
 
     public static JarPackageEntity fromDroppedItem(Level world, Entity originalEntity, ItemStack itemstack) {
@@ -99,18 +98,9 @@ public class JarPackageEntity extends PackageEntity implements IHaveGoggleInform
         return jarEntity;
     }
 
-    public static JarPackageEntity spawn(PlayMessages.SpawnEntity spawnEntity, Level world) {
-        JarPackageEntity jarPackageEntity =
-                new JarPackageEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ());
-        jarPackageEntity.setDeltaMovement(spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ());
-        jarPackageEntity.clientPosition = jarPackageEntity.position();
-        return jarPackageEntity;
-    }
-
     public static EntityType.Builder<?> build(EntityType.Builder<?> builder) {
         @SuppressWarnings("unchecked")
         EntityType.Builder<PackageEntity> boxBuilder = (EntityType.Builder<PackageEntity>) builder;
-        return boxBuilder.setCustomClientFactory(JarPackageEntity::spawn)
-                .sized(1, 1);
+        return boxBuilder.sized(1, 1);
     }
 }

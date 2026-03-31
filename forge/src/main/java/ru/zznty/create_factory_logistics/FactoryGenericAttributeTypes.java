@@ -2,8 +2,8 @@ package ru.zznty.create_factory_logistics;
 
 import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.RegistryObject;
 import ru.zznty.create_factory_logistics.logistics.generic.FluidGenericAttribute;
 import ru.zznty.create_factory_logistics.logistics.generic.FluidNoNbtGenericAttribute;
 

@@ -7,7 +7,6 @@ import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -30,16 +29,14 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.FluidActionResult;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidActionResult;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidUtil;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_logistics.Config;
@@ -85,36 +82,37 @@ public class JarPackageItem extends PackageItem {
 
         BlockPos relative = hitResult.getBlockPos().relative(hitResult.getDirection());
 
-        return box.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(fluidItem -> {
-            FluidStack fluid = fluidItem.drain(Config.jarCapacity, IFluidHandler.FluidAction.SIMULATE);
-            if (fluid.getAmount() != Config.jarCapacity ||
-                    !(fluid.getFluid() instanceof FlowingFluid) ||
-                    !worldIn.mayInteract(playerIn, relative) ||
-                    !playerIn.mayUseItemAt(relative, hitResult.getDirection(), box) ||
-                    !(worldIn instanceof ServerLevel serverLevel))
-                return InteractionResultHolder.fail(box);
+        var fluidItem = box.getCapability(Capabilities.FluidHandler.ITEM);
+        if (fluidItem == null) return InteractionResultHolder.pass(box);
 
-            JarUnpackingHandler handler = JarUnpackingHandler.REGISTRY.get(fluid.getFluid());
-            boolean success;
-            if (handler != null) {
-                success = handler.unpack(serverLevel, relative, fluid, playerIn);
-            } else {
-                BlockState blockState = worldIn.getBlockState(hitResult.getBlockPos());
-
-                BlockPos placePos = canBlockContainFluid(worldIn, hitResult.getBlockPos(), blockState, fluid) ?
-                                    hitResult.getBlockPos() :
-                                    relative;
-
-                success = emptyContents(playerIn, worldIn, handIn, placePos, box);
-            }
-
-            if (success) {
-                playerIn.setItemInHand(handIn, ItemStack.EMPTY);
-                return InteractionResultHolder.sidedSuccess(ItemStack.EMPTY, worldIn.isClientSide());
-            }
-
+        FluidStack fluid = fluidItem.drain(Config.jarCapacity, IFluidHandler.FluidAction.SIMULATE);
+        if (fluid.getAmount() != Config.jarCapacity ||
+                !(fluid.getFluid() instanceof FlowingFluid) ||
+                !worldIn.mayInteract(playerIn, relative) ||
+                !playerIn.mayUseItemAt(relative, hitResult.getDirection(), box) ||
+                !(worldIn instanceof ServerLevel serverLevel))
             return InteractionResultHolder.fail(box);
-        }).orElse(InteractionResultHolder.pass(box));
+
+        JarUnpackingHandler handler = JarUnpackingHandler.REGISTRY.get(fluid.getFluid());
+        boolean success;
+        if (handler != null) {
+            success = handler.unpack(serverLevel, relative, fluid, playerIn);
+        } else {
+            BlockState blockState = worldIn.getBlockState(hitResult.getBlockPos());
+
+            BlockPos placePos = canBlockContainFluid(worldIn, hitResult.getBlockPos(), blockState, fluid) ?
+                                hitResult.getBlockPos() :
+                                relative;
+
+            success = emptyContents(playerIn, worldIn, handIn, placePos, box);
+        }
+
+        if (success) {
+            playerIn.setItemInHand(handIn, ItemStack.EMPTY);
+            return InteractionResultHolder.sidedSuccess(ItemStack.EMPTY, worldIn.isClientSide());
+        }
+
+        return InteractionResultHolder.fail(box);
     }
 
     protected boolean canBlockContainFluid(Level worldIn, BlockPos posIn, BlockState blockState, FluidStack fluid) {
@@ -188,11 +186,6 @@ public class JarPackageItem extends PackageItem {
         jarEntity.setDeltaMovement(motion);
         jarEntity.tossedBy = new WeakReference<>(player);
         world.addFreshEntity(jarEntity);
-    }
-
-    @Override
-    public @Nullable ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
-        return new FluidHandlerItemStack(stack, Config.jarCapacity);
     }
 
     @Override

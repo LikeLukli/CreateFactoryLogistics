@@ -10,7 +10,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import ru.zznty.create_factory_abstractions.api.generic.stack.GenericStack;
 
 import javax.annotation.Nullable;

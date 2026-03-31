@@ -4,9 +4,9 @@ import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class FluidItemStackHandler extends ItemStackHandler {
@@ -17,7 +17,7 @@ public class FluidItemStackHandler extends ItemStackHandler {
         if (stack.getItem() instanceof BucketItem)
             return true;
 
-        return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).isPresent();
+        return stack.getCapability(Capabilities.FluidHandler.ITEM) != null;
     }
 
     @Override
@@ -47,7 +47,7 @@ public class FluidItemStackHandler extends ItemStackHandler {
             return be.getFluid();
         }
 
-        return stack.getCapability(ForgeCapabilities.FLUID_HANDLER_ITEM).map(fluidHandler -> {
+        return Optional.ofNullable(stack.getCapability(Capabilities.FluidHandler.ITEM)).map(fluidHandler -> {
             if (fluidHandler.getTanks() < 1) return Fluids.EMPTY;
             FluidStack fluidInItem = fluidHandler.getFluidInTank(0);
 

@@ -14,14 +14,14 @@ loom {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 loom {
-    forge {
+    neoForge {
         mixinConfig 'mixins.create_factory_logistics.json'
     }
 }
 
 dependencies {
     compileOnly annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0-rc.3")
-    include implementation("io.github.llamalad7:mixinextras-forge:0.5.0-rc.3")
+    include implementation("io.github.llamalad7:mixinextras-neoforge:0.5.0-rc.3")
 
     implementation(project(path: ":create_factory_abstractions-${minecraft_version}", configuration: 'namedElements')) { transitive false }
     include project(":create_factory_abstractions-${minecraft_version}")
@@ -35,13 +35,13 @@ dependencies {
         transitive = false
     }
 
-    forgeRuntimeLibrary "org.squiddev:Cobalt:0.7.3"
-    forgeRuntimeLibrary "com.jcraft:jzlib:1.1.3"
-    forgeRuntimeLibrary "io.netty:netty-codec-http:4.1.82.Final"
-    forgeRuntimeLibrary "io.netty:netty-codec-socks:4.1.82.Final"
-    forgeRuntimeLibrary "io.netty:netty-handler-proxy:4.1.82.Final"
+    neoForgeRuntimeLibrary "org.squiddev:Cobalt:0.7.3"
+    neoForgeRuntimeLibrary "com.jcraft:jzlib:1.1.3"
+    neoForgeRuntimeLibrary "io.netty:netty-codec-http:4.1.82.Final"
+    neoForgeRuntimeLibrary "io.netty:netty-codec-socks:4.1.82.Final"
+    neoForgeRuntimeLibrary "io.netty:netty-handler-proxy:4.1.82.Final"
 
-    modLocalRuntime "cc.tweaked:cc-tweaked-${minecraft_version}-forge:${cc_tweaked_version}"
+    modLocalRuntime "cc.tweaked:cc-tweaked-${minecraft_version}-neoforge:${cc_tweaked_version}"
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -51,7 +51,7 @@ dependencies {
 tasks.named('processResources', ProcessResources).configure {
     var replaceProperties = [
             minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
-            forge_version: forge_version, forge_version_range: forge_version_range,
+            neo_version: neo_version, neo_version_range: neo_version_range,
             loader_version_range: loader_version_range,
             mod_id: mod_id, mod_name: mod_name, mod_license: mod_license, mod_version: version,
             mod_authors: mod_authors, mod_description: mod_description,
@@ -70,7 +70,7 @@ publishMods {
     changelog = ''
     type = BETA
     displayName = "$mod_name $project.version"
-    modLoaders.add("forge")
+    modLoaders.add("neoforge")
 
     curseforge {
         accessToken = providers.environmentVariable("CURSEFORGE_TOKEN")

@@ -5,10 +5,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.inventory.CapManipulationBehaviourBase;
 import net.createmod.catnip.math.BlockFace;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_abstractions.api.generic.AbstractionsCapabilities;
 import ru.zznty.create_factory_abstractions.api.generic.capability.GenericInventory;
 
@@ -21,7 +22,7 @@ public class GeneticInventoryBehaviour extends CapManipulationBehaviourBase<Gene
     }
 
     @Override
-    protected Capability<GenericInventory> capability() {
+    protected BlockCapability<GenericInventory, @Nullable Direction> capability() {
         return AbstractionsCapabilities.GENERIC_INVENTORY;
     }
 
@@ -36,13 +37,13 @@ public class GeneticInventoryBehaviour extends CapManipulationBehaviourBase<Gene
         BlockFace targetBlockFace = this.getTarget().getOpposite();
         BlockPos pos = targetBlockFace.getPos();
 
-        targetCapability = LazyOptional.empty();
+        targetCapability = null;
 
         if (!world.isLoaded(pos))
             return;
         BlockEntity invBE = world.getBlockEntity(pos);
         if (invBE == null || !filter.test(invBE))
             return;
-        targetCapability = LazyOptional.of(() -> GenericInventory.of(invBE));
+        targetCapability = GenericInventory.of(invBE);
     }
 }

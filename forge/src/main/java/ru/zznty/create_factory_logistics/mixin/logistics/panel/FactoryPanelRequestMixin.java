@@ -104,14 +104,16 @@ public abstract class FactoryPanelRequestMixin extends FilteringBehaviour implem
         PackagerBlockEntity packager = panelBE.getRestockedPackager();
         if (packager == null)
             return;
-        Optional<PackagerAttachedHandler> handler = packager.getCapability(
-                AbstractionsCapabilities.PACKAGER_ATTACHED).resolve();
-        if (handler.isEmpty())
+        if (packager.getLevel() == null) return;
+        PackagerAttachedHandler handler = packager.getLevel().getCapability(
+                AbstractionsCapabilities.PACKAGER_ATTACHED,
+                packager.getBlockPos(), packager.getBlockState(), packager, null);
+        if (handler == null)
             return;
 
         GenericStack stack = GenericStack.of((FactoryPanelBehaviour) (Object) this);
 
-        IdentifiedInventory identifiedInventory = handler.get().identifiedInventory();
+        IdentifiedInventory identifiedInventory = handler.identifiedInventory();
 
         if (identifiedInventory == null)
             return;

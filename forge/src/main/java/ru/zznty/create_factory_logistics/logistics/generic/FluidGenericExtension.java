@@ -1,13 +1,15 @@
 package ru.zznty.create_factory_logistics.logistics.generic;
 
+import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_abstractions.api.generic.capability.GenericInventorySummaryProvider;
 import ru.zznty.create_factory_abstractions.api.generic.extensibility.GenericKeyProviderExtension;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericCapabilityWrapperProvider;
@@ -17,8 +19,8 @@ import java.util.Optional;
 public class FluidGenericExtension implements GenericKeyProviderExtension<FluidKey, FluidStack, Fluid, IFluidHandler> {
     private final GenericCapabilityWrapperProvider<IFluidHandler> provider = new GenericCapabilityWrapperProvider<>() {
         @Override
-        public Capability<IFluidHandler> capability() {
-            return ForgeCapabilities.FLUID_HANDLER;
+        public BlockCapability<IFluidHandler, @Nullable Direction> blockCapability() {
+            return Capabilities.FluidHandler.BLOCK;
         }
 
         @Override
@@ -59,7 +61,7 @@ public class FluidGenericExtension implements GenericKeyProviderExtension<FluidK
 
     @Override
     public Optional<ResourceKey<Fluid>> resourceKey(FluidKey key) {
-        return ForgeRegistries.FLUIDS.getResourceKey(key.fluid());
+        return BuiltInRegistries.FLUID.getResourceKey(key.fluid());
     }
 
     @Override
@@ -69,9 +71,9 @@ public class FluidGenericExtension implements GenericKeyProviderExtension<FluidK
 
     @Override
     public int compare(FluidKey a, FluidKey b) {
-        ResourceLocation akey = ForgeRegistries.FLUIDS.getKey(a.fluid());
+        ResourceLocation akey = BuiltInRegistries.FLUID.getKey(a.fluid());
         if (akey == null) return -1;
-        ResourceLocation bKey = ForgeRegistries.FLUIDS.getKey(b.fluid());
+        ResourceLocation bKey = BuiltInRegistries.FLUID.getKey(b.fluid());
         if (bKey == null) return 1;
         return akey.compareTo(bKey);
     }
