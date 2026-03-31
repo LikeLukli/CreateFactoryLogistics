@@ -1,8 +1,8 @@
 package ru.zznty.create_factory_abstractions.generic.key;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.Items;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKey;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKeyProvider;
@@ -43,7 +43,7 @@ public class EmptyKeyProvider implements GenericKeyProvider<EmptyKey> {
     @Override
     public <T> Optional<ResourceKey<T>> resourceKey(EmptyKey key) {
         //noinspection rawtypes
-        Optional resourceKey = ForgeRegistries.ITEMS.getResourceKey(Items.AIR);
+        Optional resourceKey = BuiltInRegistries.ITEM.getResourceKey(Items.AIR);
         //noinspection unchecked
         return resourceKey;
     }

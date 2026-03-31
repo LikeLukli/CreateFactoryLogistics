@@ -19,7 +19,6 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.network.PlayMessages;
 import ru.zznty.create_factory_logistics.FactoryEntities;
 import ru.zznty.create_factory_logistics.mixin.accessor.PackageEntityAccessor;
 
@@ -127,18 +126,9 @@ public class CompositePackageEntity extends PackageEntity implements IHaveGoggle
         return packageEntity;
     }
 
-    public static CompositePackageEntity spawn(PlayMessages.SpawnEntity spawnEntity, Level world) {
-        CompositePackageEntity packageEntity =
-                new CompositePackageEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ());
-        packageEntity.setDeltaMovement(spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ());
-        packageEntity.clientPosition = packageEntity.position();
-        return packageEntity;
-    }
-
     public static EntityType.Builder<?> build(EntityType.Builder<?> builder) {
         @SuppressWarnings("unchecked")
         EntityType.Builder<PackageEntity> boxBuilder = (EntityType.Builder<PackageEntity>) builder;
-        return boxBuilder.setCustomClientFactory(CompositePackageEntity::spawn)
-                .sized(1, 1);
+        return boxBuilder.sized(1, 1);
     }
 }

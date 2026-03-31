@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import ru.zznty.create_factory_abstractions.api.generic.key.GenericKeyRegistration;
 import ru.zznty.create_factory_abstractions.api.generic.stack.GenericStack;
 import ru.zznty.create_factory_abstractions.generic.impl.GenericContentExtender;
@@ -35,7 +35,7 @@ public class AbstractionsComputerCraftCompat {
             if (count > 256)
                 throw new LuaException("Count for item " + itemName + " exceeds 256");
             ResourceLocation resourceLocation = ResourceLocation.tryParse(itemName);
-            ItemLike item = ForgeRegistries.ITEMS.getValue(resourceLocation);
+            ItemLike item = BuiltInRegistries.ITEM.get(resourceLocation);
             if (item == null) return GenericStack.EMPTY;
 
             CompoundTag tag = null;

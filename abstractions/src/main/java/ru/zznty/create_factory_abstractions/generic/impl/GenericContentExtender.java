@@ -7,6 +7,8 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.neoforge.registries.IForgeRegistry;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
@@ -33,6 +35,8 @@ import java.util.function.Supplier;
 public final class GenericContentExtender {
     private static final Map<String, GenericContentExtension> EXTENSIONS = new HashMap<>(); // <modId, extension>
     public static final String ID = "create_factory_abstractions";
+    public static final ResourceKey<Registry<GenericKeyRegistration>> REGISTRY_KEY =
+            ResourceKey.createRegistryKey(ResourceLocation.fromNamespaceAndPath(ID, "generic_keys"));
     public static Supplier<IForgeRegistry<GenericKeyRegistration>> REGISTRY;
     public static Map<Class<?>, GenericKeyRegistration> REGISTRATIONS = new HashMap<>(); // <key, provider>
 
@@ -54,11 +58,9 @@ public final class GenericContentExtender {
     @ApiStatus.Internal
     @SubscribeEvent
     public static void onRegistry(NewRegistryEvent event) {
-        REGISTRY = event.create(new RegistryBuilder<GenericKeyRegistration>()
-                                        .setName(ResourceLocation.fromNamespaceAndPath(ID, "generic_keys"))
-                                        .setDefaultKey(ResourceLocation.fromNamespaceAndPath(ID, "empty"))
-                                        .disableSaving()
-                                        .disableOverrides(),
+        REGISTRY = event.create(new RegistryBuilder<>(REGISTRY_KEY)
+                                        .defaultKey(ResourceLocation.fromNamespaceAndPath(ID, "empty"))
+                                        .sync(false),
                                 GenericContentExtender::fillKeys);
     }
 

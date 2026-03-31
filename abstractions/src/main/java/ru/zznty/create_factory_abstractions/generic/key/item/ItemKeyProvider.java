@@ -1,12 +1,12 @@
 package ru.zznty.create_factory_abstractions.generic.key.item;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.capabilities.BlockCapability;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_abstractions.api.generic.capability.GenericInventorySummaryProvider;
@@ -69,7 +69,7 @@ public class ItemKeyProvider implements GenericKeyProvider<ItemKey> {
     @Override
     public <T> Optional<ResourceKey<T>> resourceKey(ItemKey key) {
         //noinspection rawtypes
-        Optional resourceKey = ForgeRegistries.ITEMS.getResourceKey(key.stack().getItem());
+        Optional resourceKey = BuiltInRegistries.ITEM.getResourceKey(key.stack().getItem());
         //noinspection unchecked
         return resourceKey;
     }

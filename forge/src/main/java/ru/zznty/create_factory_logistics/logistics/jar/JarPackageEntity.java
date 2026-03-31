@@ -21,13 +21,11 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidUtil;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
-import net.neoforged.neoforge.network.PlayMessages;
 import ru.zznty.create_factory_logistics.FactoryEntities;
 import ru.zznty.create_factory_logistics.logistics.jar.unpack.JarUnpackingHandler;
 import ru.zznty.create_factory_logistics.mixin.accessor.PackageEntityAccessor;
 
 import java.util.List;
-import java.util.Optional;
 
 public class JarPackageEntity extends PackageEntity implements IHaveGoggleInformation {
     public LerpedFloat fluidLevel = LerpedFloat.linear();
@@ -100,18 +98,9 @@ public class JarPackageEntity extends PackageEntity implements IHaveGoggleInform
         return jarEntity;
     }
 
-    public static JarPackageEntity spawn(PlayMessages.SpawnEntity spawnEntity, Level world) {
-        JarPackageEntity jarPackageEntity =
-                new JarPackageEntity(world, spawnEntity.getPosX(), spawnEntity.getPosY(), spawnEntity.getPosZ());
-        jarPackageEntity.setDeltaMovement(spawnEntity.getVelX(), spawnEntity.getVelY(), spawnEntity.getVelZ());
-        jarPackageEntity.clientPosition = jarPackageEntity.position();
-        return jarPackageEntity;
-    }
-
     public static EntityType.Builder<?> build(EntityType.Builder<?> builder) {
         @SuppressWarnings("unchecked")
         EntityType.Builder<PackageEntity> boxBuilder = (EntityType.Builder<PackageEntity>) builder;
-        return boxBuilder.setCustomClientFactory(JarPackageEntity::spawn)
-                .sized(1, 1);
+        return boxBuilder.sized(1, 1);
     }
 }

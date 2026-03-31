@@ -14,7 +14,7 @@ import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.Registries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_abstractions.CreateFactoryAbstractions;
@@ -57,7 +57,7 @@ public class NetworkLinkQualificationRecipe extends CustomRecipe {
     public static TagKey<Item> tag(ResourceLocation location) {
         if (!GenericContentExtender.REGISTRY.get().containsKey(location))
             throw new IllegalArgumentException("Location" + location + " does not belong to ingredient types registry");
-        return TagKey.create(ForgeRegistries.ITEMS.getRegistryKey(),
+        return TagKey.create(Registries.ITEM,
                              CreateFactoryLogistics.resource(
                                      "network_link_qualifier/" + location.getNamespace() + "/" + location.getPath()));
     }

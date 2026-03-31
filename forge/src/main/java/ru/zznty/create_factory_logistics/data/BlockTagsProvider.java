@@ -3,6 +3,7 @@ package ru.zznty.create_factory_logistics.data;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllTags;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
@@ -12,7 +13,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.neoforged.neoforge.common.data.ExistingFileHelper;
-import net.neoforged.neoforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 import ru.zznty.create_factory_logistics.CreateFactoryLogistics;
 import ru.zznty.create_factory_logistics.FactoryBlocks;
@@ -32,13 +32,13 @@ public class BlockTagsProvider extends TagsProvider<Block> {
                 .add(asKey(AllBlocks.BASIN.get()))
                 .add(asKey(FactoryBlocks.NETWORK_LINK.get()));
 
-        tag(TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(),
+        tag(TagKey.create(Registries.BLOCK,
                           CreateFactoryLogistics.resource("packager_item")))
                 .add(asKey(AllBlocks.PACKAGER.get()))
                 .addOptionalTag(ResourceLocation.fromNamespaceAndPath("create_vibrant_vaults", "vibrant_packagers"));
     }
 
     private ResourceKey<Block> asKey(Block block) {
-        return ForgeRegistries.BLOCKS.getResourceKey(block).get();
+        return BuiltInRegistries.BLOCK.getResourceKey(block).orElseThrow();
     }
 }

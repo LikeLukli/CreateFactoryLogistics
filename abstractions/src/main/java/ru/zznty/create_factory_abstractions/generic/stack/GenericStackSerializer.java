@@ -12,7 +12,9 @@ import java.util.Objects;
 
 public final class GenericStackSerializer {
     public static GenericStack read(FriendlyByteBuf buf) {
-        GenericKeyRegistration provider = buf.readRegistryIdSafe(GenericKeyRegistration.class);
+        ResourceLocation id = buf.readResourceLocation();
+        GenericKeyRegistration provider = GenericContentExtender.REGISTRY.get().getValue(id);
+        if (provider == null) return GenericStack.EMPTY;
         return new GenericStack(provider.serializer().read(buf), buf.readVarInt());
     }
 
@@ -28,7 +30,8 @@ public final class GenericStackSerializer {
 
     public static void write(GenericStack value, FriendlyByteBuf buf) {
         GenericKeyRegistration registration = GenericContentExtender.REGISTRATIONS.get(value.key().getClass());
-        buf.writeRegistryId(GenericContentExtender.REGISTRY.get(), registration);
+        ResourceLocation regKey = GenericContentExtender.REGISTRY.get().getKey(registration);
+        buf.writeResourceLocation(Objects.requireNonNull(regKey));
         registration.serializer().write(value.key(), buf);
         buf.writeVarInt(value.amount());
     }
